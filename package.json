@@ -1,23 +1,37 @@
 {
-  "name": "google-big-query-weather",
-  "version": "1.0.0",
-  "description": "Testing this API as a potential replacement for Apple Darksky.",
-  "main": "index.js",
+  "name": "big-query-weather",
+  "keywords": ["bigquery", "oauth2"],
+  "version": "0.1.0",
+  "description": "Testing the BigQuery API as a potential replacement for Apple Darksky.",
+  "main": "index.html",
+  "person": {
+    "name": "Dan Smith",
+    "email": "dev@dotherightthing.co.nz",
+    "url": "https://profiles.wordpress.org/dotherightthingnz"
+  },
+  "contributors": [
+    {
+      "name": "Dan Smith",
+      "email": "dev@dotherightthing.co.nz",
+      "url": "https://profiles.wordpress.org/dotherightthingnz"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/dotherightthing/big-query-weather/issues"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "browser-sync start --server"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dotherightthing/google-big-query-weather.git"
+    "url": "git+https://github.com/dotherightthing/big-query-weather.git"
   },
-  "author": "",
+  "author": "Dan Smith <dev@dotherightthing.co.nz>",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dotherightthing/google-big-query-weather/issues"
-  },
-  "homepage": "https://github.com/dotherightthing/google-big-query-weather#readme",
+  "homepage": "https://github.com/dotherightthing/big-query-weather#readme",
   "devDependencies": {
     "browser-sync": "^2.26.7"
-  }
+  },
+  "dependencies": {}
 }

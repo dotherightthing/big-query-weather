@@ -1,6 +1,6 @@
-# google-big-query-weather
+# big-query-weather
 
-Testing this API as a potential replacement for Apple Darksky.
+Testing the BigQuery API as a potential replacement for Apple Darksky.
 
 ## Set up
 
