@@ -1,0 +1,23 @@
+{
+  "name": "google-big-query-weather",
+  "version": "1.0.0",
+  "description": "Testing this API as a potential replacement for Apple Darksky.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "browser-sync start --server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dotherightthing/google-big-query-weather.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dotherightthing/google-big-query-weather/issues"
+  },
+  "homepage": "https://github.com/dotherightthing/google-big-query-weather#readme",
+  "devDependencies": {
+    "browser-sync": "^2.26.7"
+  }
+}
