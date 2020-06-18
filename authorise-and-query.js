@@ -10,16 +10,26 @@ $(document).ready(function () {
   })
 });
 
+/**
+ * @function auth
+ * @summary Authenticate using supplied User Credentials, then run query
+ */
 function auth() {
   gapi.auth.authorize({
     'client_id': $('#client-id').val(),
     'scope': 'https://www.googleapis.com/auth/bigquery'
   }, function() {
-      gapi.client.load('bigquery', 'v2', runQuery);
-      $('#client_initiated').html('BigQuery client authorized');
+      gapi.client.load('bigquery', 'v2', runQueries);
+      $('#auth-status').html('BigQuery client authorized');
   });
+}
 
-  $('#auth_button').hide();
+/**
+ * @function runQueries
+ * @summary Run queries
+ */
+function runQueries() {
+  getWeatherForHistoricalDate();
 }
 
 // Previously, BigQuery executed queries using a non - standard SQL dialect known as BigQuery SQL.
@@ -28,7 +38,17 @@ function auth() {
 // Standard SQL is the preferred SQL dialect for querying data stored in BigQuery.
 // - https://cloud.google.com/bigquery/docs/reference/standard-sql/migrating-from-legacy-sql
 
-function runQuery() {
+/**
+ * @function getWeatherForHistoricalDate
+ * @summary Get weather for a historical day as a data table
+ */
+function getWeatherForHistoricalDate() {
+  var dmy = $('#date').val();
+  var parts = dmy.split('.');
+  var d = parts[0];
+  var m = parts[1];
+  var y = parts[2];
+
   var request = gapi.client.bigquery.jobs.query({
     'projectId': $('#project-id').val(),
     'timeoutMs': '30000',
@@ -55,8 +75,8 @@ function runQuery() {
 
     $.each(response.result.rows, function(i, item) {
       data.addRow([
-        fToC(item.f[3].v),
-        fToC(item.f[4].v),
+        convertFarenheitToCelsius(item.f[3].v),
+        convertFarenheitToCelsius(item.f[4].v),
         item.f[5].v,
         item.f[6].v,
         item.f[7].v,
@@ -66,9 +86,15 @@ function runQuery() {
       ]);
     });
 
-    var table = new google.visualization.Table(document.getElementById('results'));
+    var table = new google.visualization.Table(document.getElementById('date-results'));
     table.draw(data, { showRowNumber: true });
   });
 }
 
-fToC = (fahrenheit) => parseInt((parseFloat(fahrenheit) - 32) * 5 / 9);
+/**
+ * @function convertFarenheitToCelsius
+ * @summary Convert Farenheit into Celsius
+ * @param {number} fahrenheit
+ * @returns {number} celsius
+ */
+convertFarenheitToCelsius = (fahrenheit) => parseInt((parseFloat(fahrenheit) - 32) * 5 / 9);
