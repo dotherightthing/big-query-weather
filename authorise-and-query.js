@@ -14,7 +14,7 @@ $(document).ready(function () {
  * @function auth
  * @summary Authenticate using supplied User Credentials, then run query
  */
-function auth() {
+const auth = () => {
   gapi.auth.authorize({
     'client_id': $('#client-id').val(),
     'scope': 'https://www.googleapis.com/auth/bigquery'
@@ -27,29 +27,26 @@ function auth() {
 /**
  * @function runQueries
  * @summary Run queries
+ * @description
+ * Previously, BigQuery executed queries using a non - standard SQL dialect known as BigQuery SQL.
+ * With the launch of BigQuery 2.0, BigQuery released support for standard SQL,
+ * and renamed BigQuery SQL to legacy SQL.
+ * Standard SQL is the preferred SQL dialect for querying data stored in BigQuery.
+ * @see https://cloud.google.com/bigquery/docs/reference/standard-sql/migrating-from-legacy-sql
  */
-function runQueries() {
+const runQueries = () => {
   getWeatherForHistoricalDate();
 }
-
-// Previously, BigQuery executed queries using a non - standard SQL dialect known as BigQuery SQL.
-// With the launch of BigQuery 2.0, BigQuery released support for standard SQL,
-// and renamed BigQuery SQL to legacy SQL.
-// Standard SQL is the preferred SQL dialect for querying data stored in BigQuery.
-// - https://cloud.google.com/bigquery/docs/reference/standard-sql/migrating-from-legacy-sql
 
 /**
  * @function getWeatherForHistoricalDate
  * @summary Get weather for a historical day as a data table
  */
-function getWeatherForHistoricalDate() {
-  var dmy = $('#date').val();
-  var parts = dmy.split('.');
-  var d = parts[0];
-  var m = parts[1];
-  var y = parts[2];
+const getWeatherForHistoricalDate = () => {
+  const dmy = $('#date').val();
+  const [d, m, y] = dmy.split('.');
 
-  var request = gapi.client.bigquery.jobs.query({
+  const request = gapi.client.bigquery.jobs.query({
     'projectId': $('#project-id').val(),
     'timeoutMs': '30000',
     // note SQL dialect differs between Google console and here:
@@ -60,7 +57,7 @@ function getWeatherForHistoricalDate() {
   });
 
   request.execute(function(response) {
-    var data = new google.visualization.DataTable();
+    const data = new google.visualization.DataTable();
     // data.addColumn('string', 'Day');
     // data.addColumn('string', 'Month');
     // data.addColumn('string', 'Year');
@@ -86,7 +83,7 @@ function getWeatherForHistoricalDate() {
       ]);
     });
 
-    var table = new google.visualization.Table(document.getElementById('date-results'));
+    const table = new google.visualization.Table(document.getElementById('date-results'));
     table.draw(data, { showRowNumber: true });
   });
 }
@@ -97,4 +94,4 @@ function getWeatherForHistoricalDate() {
  * @param {number} fahrenheit
  * @returns {number} celsius
  */
-convertFarenheitToCelsius = (fahrenheit) => parseInt((parseFloat(fahrenheit) - 32) * 5 / 9);
+const convertFarenheitToCelsius = (fahrenheit) => parseInt((parseFloat(fahrenheit) - 32) * 5 / 9);
