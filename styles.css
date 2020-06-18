@@ -1,9 +1,9 @@
 /* Bulma overrides */
 
 .navbar {
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
 }
 
-.navbar-item {
-    padding-left: 0;
+.hr {
+    margin: 0;
 }
