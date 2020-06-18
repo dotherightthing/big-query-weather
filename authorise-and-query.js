@@ -56,7 +56,7 @@ function getWeatherForHistoricalDate() {
     // console: Standard dialect
     // table name - `` vs []
     // cast as integer - CAST(da as NUMERIC) vs INTEGER(da)
-    'query': 'SELECT da, mo, year, min, max, fog, rain_drizzle, snow_ice_pellets, hail, visib, stn FROM [bigquery-public-data.noaa_gsod.gsod2015] WHERE year = "2015" AND mo = "09" AND INTEGER(da) > 7 AND INTEGER(da) < 9 LIMIT 10'
+    'query': `SELECT da, mo, year, min, max, fog, rain_drizzle, snow_ice_pellets, hail, visib, stn FROM [bigquery-public-data.noaa_gsod.gsod2015] WHERE year = "${y}" AND mo = "${m}" AND INTEGER(da) = ${d} LIMIT 10`
   });
 
   request.execute(function(response) {
