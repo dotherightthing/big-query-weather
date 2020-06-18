@@ -44,8 +44,8 @@ function runQuery() {
     // data.addColumn('string', 'Day');
     // data.addColumn('string', 'Month');
     // data.addColumn('string', 'Year');
-    data.addColumn('string', 'MinF');
-    data.addColumn('string', 'MaxF');
+    data.addColumn('number', 'Min \xB0C');
+    data.addColumn('number', 'Max \xB0C');
     data.addColumn('string', 'Fog');
     data.addColumn('string', 'Rain/drizzle');
     data.addColumn('string', 'Snow/ice');
@@ -55,8 +55,8 @@ function runQuery() {
 
     $.each(response.result.rows, function(i, item) {
       data.addRow([
-        item.f[3].v,
-        item.f[4].v,
+        fToC(item.f[3].v),
+        fToC(item.f[4].v),
         item.f[5].v,
         item.f[6].v,
         item.f[7].v,
@@ -70,3 +70,5 @@ function runQuery() {
     table.draw(data, { showRowNumber: true });
   });
 }
+
+fToC = (fahrenheit) => parseInt((parseFloat(fahrenheit) - 32) * 5 / 9);
