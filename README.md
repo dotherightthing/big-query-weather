@@ -65,6 +65,11 @@ Note:
 * <https://stackoverflow.com/questions/10456174/oauth-how-to-test-with-local-urls>
 * <https://developers.google.com/chart/interactive/docs/reference#DataTable>
 * <https://stackoverflow.com/questions/32458437/typeerror-google-visualization-datatable-is-not-a-constructor#32459785>
+* <https://stackoverflow.com/questions/34804654/how-to-get-the-historical-weather-for-any-city-with-bigquery#34804655>
+* <https://github.com/GoogleCloudPlatform/training-data-analyst/blob/master/blogs/ghcn/ghcn_on_bq.ipynb?short_path=974a495>
+* <https://console.cloud.google.com/marketplace/product/noaa-public/ghcn-d>
+* <https://stackoverflow.com/questions/42068651/haversine-distance-in-bigquery>
+* <https://cloud.google.com/bigquery/docs/reference/standard-sql/geography_functions>
 
 ## Alternatives
 
