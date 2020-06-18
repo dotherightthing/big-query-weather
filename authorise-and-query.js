@@ -22,11 +22,18 @@ function auth() {
   $('#auth_button').hide();
 }
 
+// Previously, BigQuery executed queries using a non - standard SQL dialect known as BigQuery SQL.
+// With the launch of BigQuery 2.0, BigQuery released support for standard SQL,
+// and renamed BigQuery SQL to legacy SQL.
+// Standard SQL is the preferred SQL dialect for querying data stored in BigQuery.
+// - https://cloud.google.com/bigquery/docs/reference/standard-sql/migrating-from-legacy-sql
+
 function runQuery() {
   var request = gapi.client.bigquery.jobs.query({
     'projectId': $('#project-id').val(),
     'timeoutMs': '30000',
-    // note SQL format differs between Google console and here:
+    // note SQL dialect differs between Google console and here:
+    // console: Standard dialect
     // table name - `` vs []
     // cast as integer - CAST(da as NUMERIC) vs INTEGER(da)
     'query': 'SELECT da, mo, year, min, max, fog, rain_drizzle, snow_ice_pellets, hail, visib, stn FROM [bigquery-public-data.noaa_gsod.gsod2015] WHERE year = "2015" AND mo = "09" AND INTEGER(da) > 7 AND INTEGER(da) < 9 LIMIT 10'
