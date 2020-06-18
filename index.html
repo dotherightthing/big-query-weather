@@ -2,10 +2,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>google-big-query-weather</title>
     <!-- Google API Client Library for JavaScript, supports various APIs incl BigQuery:
          https://github.com/google/google-api-javascript-client
     -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="/styles.css">
     <script src="https://apis.google.com/js/client.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
@@ -13,25 +16,76 @@
   </head>
 
   <body>
-    <h1>google-big-query-weather</h1>
-    <!-- wrapping form prompts BitWarden to save field values -->
-    <form>
-      <fieldset>
-        <legend>User credentials</legend>
-        <div>
-          <label for="project-id">Project Number/ID</label>
-          <input type="text" name="project-id" id="project-id" size="15" autocomplete="on">
+    <header class="navbar is-warning">
+      <div class="container">
+        <div class="navbar-item">
+          <h1 class="title is-6">google-big-query-weather</h1>
         </div>
-        <div>
-          <label for="client-id">Client ID</label>
-          <input type="password" name="client-id" id="client-id" aria-describedby="client-id-hint" size="50" autocomplete="on">
-          <span id="client-id-hint">Remove the trailing <code>.apps.googleusercontent.com</code></span>
+      </div>
+    </header>
+    <main class="container">
+      <!-- wrapping form prompts BitWarden to save field values -->
+      <form class="section">
+        <div class="columns">
+          <fieldset class="column">
+            <legend class="title is-4">User credentials</legend>
+            <div class="field">
+              <label class="label" for="project-id">Project Number/ID</label>
+              <div class="control">
+                <input type="text" name="project-id" id="project-id" size="15" autocomplete="on" class="input">
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="client-id">Client ID</label>
+              <div class="control">
+                <input type="password" name="client-id" id="client-id" aria-describedby="client-id-hint" size="50" autocomplete="on" class="input">
+              </div>
+              <p class="help" id="client-id-hint">Remove the trailing <code>.apps.googleusercontent.com</code></p>
+            </div>
+          </fieldset>
+          <fieldset class="column">
+            <legend class="title is-4">Query parameters</legend>
+            <div class="field">
+              <label class="label" for="date">Date</label>
+              <div class="control">
+                <div class="select">
+                  <select name="date" id="date">
+                    <option selected>Select</option>
+                    <option value="7.09.2015">7.09.2015</option>
+                    <option value="7.09.2020">7.09.2020</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="location">Location</label>
+              <div class="control">
+                <div class="select">
+                  <select name="location" id="location" disabled>
+                    <option selected>Select</option>
+                    <option value="47.8915649,106.7617896">Ulaanbaatar, Mongolia</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </fieldset>
         </div>
-        <input type="submit" id="auth_button" value="Authorize and run query">
-      </fieldset>
-    </form>
-    <h2 id="results-title">Results</h2>
-    <p id="client_initiated" aria-live="polite"></p>
-    <div id="results" aria-live="polite" aria-labelledby="results-title"></div>
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <div class="control">
+                <input type="submit" id="auth_button" value="Authorize and run query" class="button is-primary">
+              </div>
+              <p class="help is-success" id="auth-status" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+      </form>
+      <hr class="hr">
+      <section class="section">
+        <h2 id="date-results-title" class="title is-4">Date results</h2>
+        <div id="date-results" aria-live="polite" aria-labelledby="date-results-title"></div>
+      </section>
+    </main>
   </body>
 </html>
