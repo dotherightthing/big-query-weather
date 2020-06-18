@@ -36,6 +36,7 @@ const auth = () => {
  */
 const runQueries = () => {
   getWeatherForHistoricalDate();
+  getWeatherStationsClosestToLocation();
 }
 
 /**
@@ -43,8 +44,14 @@ const runQueries = () => {
  * @summary Get weather for a historical day as a data table
  */
 const getWeatherForHistoricalDate = () => {
-  const dmy = $('#date').val();
-  const [d, m, y] = dmy.split('.');
+  const date = $('#date').val();
+
+  if (date === '') {
+    $('#date-results').text('No selection');
+    return;
+  }
+
+  const [d, m, y] = date.split('.');
 
   const request = gapi.client.bigquery.jobs.query({
     'projectId': $('#project-id').val(),
@@ -56,35 +63,108 @@ const getWeatherForHistoricalDate = () => {
     'query': `SELECT da, mo, year, min, max, fog, rain_drizzle, snow_ice_pellets, hail, visib, stn FROM [bigquery-public-data.noaa_gsod.gsod2015] WHERE year = "${y}" AND mo = "${m}" AND INTEGER(da) = ${d} LIMIT 10`
   });
 
+  $('#date-results').text('Processing..');
+
   request.execute(function(response) {
-    const data = new google.visualization.DataTable();
-    // data.addColumn('string', 'Day');
-    // data.addColumn('string', 'Month');
-    // data.addColumn('string', 'Year');
-    data.addColumn('number', 'Min \xB0C');
-    data.addColumn('number', 'Max \xB0C');
-    data.addColumn('string', 'Fog');
-    data.addColumn('string', 'Rain/drizzle');
-    data.addColumn('string', 'Snow/ice');
-    data.addColumn('string', 'Hail');
-    data.addColumn('string', 'Visibility');
-    data.addColumn('string', 'Weather station');
+    if (response.totalRows > 0) {
+      const data = new google.visualization.DataTable();
+      // data.addColumn('string', 'Day');
+      // data.addColumn('string', 'Month');
+      // data.addColumn('string', 'Year');
+      data.addColumn('number', 'Min \xB0C');
+      data.addColumn('number', 'Max \xB0C');
+      data.addColumn('string', 'Fog');
+      data.addColumn('string', 'Rain/drizzle');
+      data.addColumn('string', 'Snow/ice');
+      data.addColumn('string', 'Hail');
+      data.addColumn('string', 'Visibility');
+      data.addColumn('string', 'Weather station');
 
-    $.each(response.result.rows, function(i, item) {
-      data.addRow([
-        convertFarenheitToCelsius(item.f[3].v),
-        convertFarenheitToCelsius(item.f[4].v),
-        item.f[5].v,
-        item.f[6].v,
-        item.f[7].v,
-        item.f[8].v,
-        item.f[9].v,
-        item.f[10].v
-      ]);
-    });
+      $.each(response.result.rows, function (i, item) {
+        data.addRow([
+          convertFarenheitToCelsius(item.f[3].v),
+          convertFarenheitToCelsius(item.f[4].v),
+          item.f[5].v,
+          item.f[6].v,
+          item.f[7].v,
+          item.f[8].v,
+          item.f[9].v,
+          item.f[10].v
+        ]);
+      });
 
-    const table = new google.visualization.Table(document.getElementById('date-results'));
-    table.draw(data, { showRowNumber: true });
+      const table = new google.visualization.Table(document.getElementById('date-results'));
+      table.draw(data, { showRowNumber: true });
+    } else {
+      $('#date-results').text('No results');
+    }
+  });
+}
+
+/**
+ * @function getWeatherStationsClosestToLocation
+ * @summary Get weather stations closes to a location
+ */
+const getWeatherStationsClosestToLocation = () => {
+  const location = $('#location').val();
+
+  if (location === '') {
+    $('#location-results').text('No selection');
+    return;
+  }
+
+  let [lat, lng] = location.split(',');
+  let latLimitLow, latLimitHigh, lngLimitLow, lngLimitHigh;
+
+  lat = parseInt(lat);
+  lng = parseInt(lng);
+
+  if (lat > 0) {
+    latLimitLow = lat;
+    latLimitHigh = lat + 1;
+  } else {
+    latLimitLow = lat - 1;
+    latLimitHigh = lat;
+  }
+
+  if (lng > 0) {
+    lngLimitLow = lng;
+    lngLimitHigh = lng + 1;
+  } else {
+    lngLimitLow = lng - 1;
+    lngLimitHigh = lng;
+  }
+
+  const request = gapi.client.bigquery.jobs.query({
+    'projectId': $('#project-id').val(),
+    'timeoutMs': '30000',
+    'query': `SELECT id, name, latitude, longitude FROM [bigquery-public-data.ghcn_d.ghcnd_stations] WHERE latitude > ${latLimitLow} AND latitude < ${latLimitHigh} AND longitude > ${lngLimitLow} AND longitude < ${lngLimitHigh} LIMIT 10`
+  });
+
+  $('#location-results').text('Processing..');
+
+  request.execute(function (response) {
+    if (response.totalRows > 0) {
+      const data = new google.visualization.DataTable();
+      data.addColumn('string', 'ID');
+      data.addColumn('string', 'Name');
+      data.addColumn('string', 'Lat');
+      data.addColumn('string', 'Lng');
+
+      $.each(response.result.rows, function (i, item) {
+        data.addRow([
+          item.f[0].v,
+          item.f[1].v,
+          item.f[2].v,
+          item.f[3].v
+        ]);
+      });
+
+      const table = new google.visualization.Table(document.getElementById('location-results'));
+      table.draw(data, { showRowNumber: true });
+    } else {
+      $('#location-results').text('No results');
+    }
   });
 }
 
